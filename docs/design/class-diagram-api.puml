@@ -1,0 +1,41 @@
+@startuml
+skinparam classAttributeIconSize 0
+package controller {
+  class ParkingLotController {
+    +findAll(q : String) : List<ParkingLotResponse>
+    +findById(id : Long) : ParkingLotResponse
+    +findNearest(lat : double, lng : double, type : String) : NearestLotResponse
+  }
+}
+package service {
+  class ParkingLotService {
+    +findAll(keyword : String) : List<ParkingLotResponse>
+    +findById(id : Long) : ParkingLotResponse
+    +findNearest(lat : double, lng : double, vehicleType : String) : NearestLotResponse
+    ~distanceMeters(lat1, lng1, lat2, lng2) : double
+  }
+  class NotFoundException
+}
+package dto {
+class ParkingLotResponse <<record>> {
+    id, code, nameTh, building, vehicleType
+    latitude, longitude, totalSpots, availableSpots
+  }
+  class NearestLotResponse <<record>> {
+    lot : ParkingLotResponse
+    distanceMeters : long
+  }
+  class ErrorResponse <<record>> {
+    message : String
+  }
+}
+package dao {
+  interface ParkingLotRepository
+}
+ParkingLotController --> ParkingLotService
+ParkingLotService --> ParkingLotRepository
+ParkingLotService ..> ParkingLotResponse
+ParkingLotService ..> NearestLotResponse
+ParkingLotController ..> ErrorResponse
+ParkingLotService ..> NotFoundException
+@enduml
