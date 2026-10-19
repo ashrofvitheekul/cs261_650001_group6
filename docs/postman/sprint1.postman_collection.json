@@ -1,0 +1,374 @@
+{
+  "info": {
+    "name": "TU Smart Parking - Sprint 1",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1 ลานทั้งหมด (US02)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200', () => pm.response.to.have.status(200));",
+              "const lots = pm.response.json();",
+              "pm.test('8 ลาน เรียงตามรหัส', () => { pm.expect(lots.length).to.eql(8); pm.expect(lots[0].code).to.eql('M1'); });",
+              "pm.test('ไม่ส่งจำนวนที่ว่าง', () => pm.expect(lots[0]).to.not.have.property('availableSpots'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/parking-lots",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "parking-lots"
+          ]
+        }
+      }
+    },
+    {
+      "name": "2 ค้นหา หอสมุด (US04)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200', () => pm.response.to.have.status(200));",
+              "pm.test('มีแค่ P3', () => pm.expect(pm.response.json().map(l => l.code)).to.eql(['P3']));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/parking-lots?q=หอสมุด",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "parking-lots"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "หอสมุด"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "3 ค้นหา วิทยาศาสตร์ (US04)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('M1 และ P1', () => pm.expect(pm.response.json().map(l => l.code)).to.eql(['M1', 'P1']));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/parking-lots?q=วิทยาศาสตร์",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "parking-lots"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "วิทยาศาสตร์"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "4 ค้นหา sc ตัวพิมพ์เล็ก (US04)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('พบ P2', () => pm.expect(pm.response.json().map(l => l.code)).to.include('P2'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/parking-lots?q=sc",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "parking-lots"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "sc"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "5 ค้นหา ตึกโดม (US04)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('ไม่พบ = []', () => pm.expect(pm.response.json()).to.eql([]));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/parking-lots?q=ตึกโดม",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "parking-lots"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "ตึกโดม"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "6 ลาน id 3",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200 และเป็น P3', () => { pm.response.to.have.status(200); pm.expect(pm.response.json().code).to.eql('P3'); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/parking-lots/3",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "parking-lots",
+            "3"
+          ]
+        }
+      }
+    },
+    {
+      "name": "7 ลาน id 99 ไม่มีจริง",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('404', () => pm.response.to.have.status(404));",
+              "pm.test('ข้อความ', () => pm.expect(pm.response.json().message).to.eql('ไม่พบลานจอด'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/parking-lots/99",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "parking-lots",
+            "99"
+          ]
+        }
+      }
+    },
+    {
+      "name": "8 ใกล้สุด รถยนต์ (US05)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200', () => pm.response.to.have.status(200));",
+              "const r = pm.response.json();",
+              "pm.test('P2 ห่างประมาณ 146 ม.', () => { pm.expect(r.lot.code).to.eql('P2'); pm.expect(r.distanceMeters).to.be.within(140, 152); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/parking-lots/nearest?lat=14.0690&lng=100.6060&type=CAR",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "parking-lots",
+            "nearest"
+          ],
+          "query": [
+            {
+              "key": "lat",
+              "value": "14.0690"
+            },
+            {
+              "key": "lng",
+              "value": "100.6060"
+            },
+            {
+              "key": "type",
+              "value": "CAR"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "9 ใกล้สุด จักรยานยนต์ (US05)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const r = pm.response.json();",
+              "pm.test('M1 ห่างประมาณ 337 ม.', () => { pm.expect(r.lot.code).to.eql('M1'); pm.expect(r.distanceMeters).to.be.within(330, 345); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/parking-lots/nearest?lat=14.0690&lng=100.6060&type=MOTORCYCLE",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "parking-lots",
+            "nearest"
+          ],
+          "query": [
+            {
+              "key": "lat",
+              "value": "14.0690"
+            },
+            {
+              "key": "lng",
+              "value": "100.6060"
+            },
+            {
+              "key": "type",
+              "value": "MOTORCYCLE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "10 ใกล้สุด ประเภทรถผิด (US05)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('400', () => pm.response.to.have.status(400));",
+              "pm.test('ข้อความ', () => pm.expect(pm.response.json().message).to.eql('ประเภทรถต้องเป็น CAR หรือ MOTORCYCLE'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/parking-lots/nearest?lat=14.0690&lng=100.6060&type=BUS",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "parking-lots",
+            "nearest"
+          ],
+          "query": [
+            {
+              "key": "lat",
+              "value": "14.0690"
+            },
+            {
+              "key": "lng",
+              "value": "100.6060"
+            },
+            {
+              "key": "type",
+              "value": "BUS"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8081"
+    }
+  ]
+}

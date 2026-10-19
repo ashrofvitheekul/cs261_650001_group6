@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * GET /api/parking-lots every lot (US02), ?q=keyword to search (US04)
  * GET /api/parking-lots/{id} one lot
- * GET /api/parking-lots/nearest closest lot with free spots (US05)
+ * GET /api/parking-lots/nearest closest lot of one vehicle type (US05)
  */
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
