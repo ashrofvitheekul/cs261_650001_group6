@@ -4,24 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TU Smart Parking</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;700&display=swap">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header>
-        <h1>TU Smart Parking</h1>
-    </header>
+    <!-- Left menu (Figma: hifi-ptototype). Sprint 1 has 3 pages; the rest come in Sprint 2 -->
+    <aside class="sidebar">
+        <div class="brand">
+            <svg class="logo" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="#7b1113" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7z"/>
+                <rect x="8.5" y="7" width="7" height="4.5" rx="1.2" fill="#fff"/>
+            </svg>
+            <span class="divider"></span>
+            <span><b>TU</b> Smart Parking</span>
+        </div>
+        <nav class="menu">
+            <a href="#map" class="active" data-target="map">แผนที่ลานจอด</a>
+            <a href="#search-input" data-target="search-input">ค้นหาลานจอด</a>
+            <a href="#nearest" data-target="nearest-btn">หาลานใกล้ที่สุด</a>
+        </nav>
+    </aside>
 
-    <main class="layout">
-        <section class="panel">
+    <div class="content">
+        <header class="topbar">
+            <h1 id="page-title">แผนที่ลานจอด</h1>
+        </header>
 
-            <p id="message" class="message" hidden></p>
-            <ul id="lot-list" class="lot-list"></ul>
-        </section>
+        <main class="layout">
+            <!-- US02 แผนที่ (สุจิรา) -->
+            <div id="map" class="map"></div>
 
-        <div id="map" class="map"></div>
-    </main>
+            <section class="panel">
+                <!-- US04 ค้นหา (ณัฏฐนิชา) -->
+                <div class="search">
+                    <input id="search-input" type="search" placeholder="ค้นหาชื่อลาน / ชื่ออาคาร" autocomplete="off">
+                    <button id="search-clear" type="button" class="link-btn">✕ ล้าง</button>
+                </div>
+
+                <!-- US05 หาลานใกล้ที่สุด (ณัฏฐนิชา) -->
+                <div id="nearest" class="nearest">
+                    <div class="vehicle" role="radiogroup" aria-label="ประเภทรถ">
+                        <label class="pill"><input type="radio" name="vehicle" value="CAR" checked><span>รถยนต์</span></label>
+                        <label class="pill"><input type="radio" name="vehicle" value="MOTORCYCLE"><span>จักรยานยนต์</span></label>
+                    </div>
+                    <button id="nearest-btn" type="button" class="btn-primary">หาลานใกล้ที่สุด</button>
+                    <div id="nearest-result" class="nearest-result" hidden></div>
+                </div>
+
+                <!-- US02 รายการลาน (สุจิรา) -->
+                <p id="message" class="message" hidden></p>
+                <p id="lot-count" class="lot-count"></p>
+                <ul id="lot-list" class="lot-list"></ul>
+                <p id="search-hint" class="hint" hidden>ค้นได้จาก รหัสลาน · ชื่อลาน · ชื่ออาคารใกล้เคียง</p>
+            </section>
+        </main>
+    </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
