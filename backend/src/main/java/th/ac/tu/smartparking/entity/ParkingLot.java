@@ -51,6 +51,10 @@ public class ParkingLot {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    /** Lot outline as JSON [[lat,lng],...]; drawn as the lot zone on the map. */
+    @Column(name = "zone")
+    private String zone;
+
     protected ParkingLot() {
         // for JPA
     }
@@ -79,4 +83,5 @@ public class ParkingLot {
     public int getTotalSpots() { return totalSpots; }
     public int getAvailableSpots() { return availableSpots; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public String getZone() { return zone; }
 }

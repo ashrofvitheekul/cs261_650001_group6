@@ -17,6 +17,7 @@ class ParkingLot <<Entity>> {
   -longitude : BigDecimal
   -totalSpots : int
   -availableSpots : int
+  -zone : String
   -updatedAt : LocalDateTime
 }
 

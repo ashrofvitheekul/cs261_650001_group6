@@ -241,7 +241,7 @@
             "exec": [
               "pm.test('200', () => pm.response.to.have.status(200));",
               "const r = pm.response.json();",
-              "pm.test('P2 ห่างประมาณ 146 ม.', () => { pm.expect(r.lot.code).to.eql('P2'); pm.expect(r.distanceMeters).to.be.within(140, 152); });"
+              "pm.test('P2 ห่างประมาณ 151 ม.', () => { pm.expect(r.lot.code).to.eql('P2'); pm.expect(r.distanceMeters).to.be.within(145, 155); });"
             ]
           }
         }
@@ -250,7 +250,7 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/parking-lots/nearest?lat=14.0690&lng=100.6060&type=CAR",
+          "raw": "{{baseUrl}}/api/parking-lots/nearest?lat=14.0687&lng=100.6056&type=CAR",
           "host": [
             "{{baseUrl}}"
           ],
@@ -262,11 +262,11 @@
           "query": [
             {
               "key": "lat",
-              "value": "14.0690"
+              "value": "14.0687"
             },
             {
               "key": "lng",
-              "value": "100.6060"
+              "value": "100.6056"
             },
             {
               "key": "type",
@@ -285,7 +285,7 @@
             "type": "text/javascript",
             "exec": [
               "const r = pm.response.json();",
-              "pm.test('M1 ห่างประมาณ 337 ม.', () => { pm.expect(r.lot.code).to.eql('M1'); pm.expect(r.distanceMeters).to.be.within(330, 345); });"
+              "pm.test('M2 ห่างประมาณ 413 ม.', () => { pm.expect(r.lot.code).to.eql('M2'); pm.expect(r.distanceMeters).to.be.within(405, 420); });"
             ]
           }
         }
@@ -294,7 +294,7 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/parking-lots/nearest?lat=14.0690&lng=100.6060&type=MOTORCYCLE",
+          "raw": "{{baseUrl}}/api/parking-lots/nearest?lat=14.0687&lng=100.6056&type=MOTORCYCLE",
           "host": [
             "{{baseUrl}}"
           ],
@@ -306,11 +306,11 @@
           "query": [
             {
               "key": "lat",
-              "value": "14.0690"
+              "value": "14.0687"
             },
             {
               "key": "lng",
-              "value": "100.6060"
+              "value": "100.6056"
             },
             {
               "key": "type",
@@ -338,7 +338,7 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/parking-lots/nearest?lat=14.0690&lng=100.6060&type=BUS",
+          "raw": "{{baseUrl}}/api/parking-lots/nearest?lat=14.0687&lng=100.6056&type=BUS",
           "host": [
             "{{baseUrl}}"
           ],
@@ -350,11 +350,11 @@
           "query": [
             {
               "key": "lat",
-              "value": "14.0690"
+              "value": "14.0687"
             },
             {
               "key": "lng",
-              "value": "100.6060"
+              "value": "100.6056"
             },
             {
               "key": "type",

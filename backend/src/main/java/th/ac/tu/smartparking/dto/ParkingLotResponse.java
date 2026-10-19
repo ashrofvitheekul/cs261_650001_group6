@@ -10,5 +10,6 @@ public record ParkingLotResponse(
  String building,
  String vehicleType,
  BigDecimal latitude,
- BigDecimal longitude) {
+ BigDecimal longitude,
+ String zone) {
 }

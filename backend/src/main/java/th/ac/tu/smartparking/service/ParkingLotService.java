@@ -71,6 +71,7 @@ public class ParkingLotService {
         lot.getBuilding(),
         lot.getVehicleType(),
         lot.getLatitude(),
-        lot.getLongitude());
+        lot.getLongitude(),
+        lot.getZone());
  }
 }
