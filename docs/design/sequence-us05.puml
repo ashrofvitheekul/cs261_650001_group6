@@ -1,4 +1,3 @@
-
 @startuml
 actor User as U
 participant "Web Page\n(nearest.js)" as UI
@@ -13,20 +12,20 @@ UI -> GPS : getCurrentPosition()
 
 alt User denies permission
   GPS --> UI : error
-  UI --> U : "Unable to access your location ..."
+  UI --> U : "Unable to access your location ..." (every lot keeps its "Navigate" link)
 else Permission granted
   GPS --> UI : lat, lng
   UI -> C : GET /api/parking-lots/nearest?lat&lng&type=CAR
   C -> S : findNearest(lat, lng, "CAR")
-  S -> R : findByVehicleTypeAndAvailableSpotsGreaterThan("CAR", 0)
-  R -> DB : SELECT ... WHERE vehicle_type='CAR' AND available_spots > 0
-  DB --> R : Available parking lots
-  S -> S : Calculate distanceMeters() for each lot and select the nearest
+  S -> R : findByVehicleTypeOrderByCodeAsc("CAR")
+  R -> DB : SELECT ... WHERE vehicle_type='CAR' ORDER BY code
+  DB --> R : car parking lots
+  S -> S : distanceMeters() for each lot and pick the smallest
 
-  alt No available parking lots
+  alt No lot of this vehicle type
     S --> C : NotFoundException
-    C --> UI : 404 {"message":"All car parking lots are full"}
-  else Available lot found
+    C --> UI : 404 {"message":"ยังไม่มีข้อมูลลานจอด"}
+  else Lot found
     C --> UI : 200 {lot, distanceMeters}
     UI --> U : Lot name + distance + "Navigate" button (opens Google Maps)
   end
