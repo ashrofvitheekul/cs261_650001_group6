@@ -1,11 +1,16 @@
-const appState = { keyword: '', markers: {}, selected: null };
+const appState = { keyword: '', markers: {}, zones: {}, selected: null };
 
 const map = L.map('map').setView(MAP_CENTER, MAP_ZOOM);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; OpenStreetMap contributors',
 }).addTo(map);
+const zoneLayer = L.layerGroup().addTo(map);
 const markerLayer = L.layerGroup().addTo(map);
+
+// Lot outline from the database (same outlines as the Figma prototype)
+const ZONE_STYLE = { color: '#7b1113', weight: 2, fillColor: '#7b1113', fillOpacity: 0.25 };
+const ZONE_SELECTED = { weight: 3, fillOpacity: 0.55 };
 
 function escapeHtml(text) {
     const div = document.createElement('div');
@@ -32,7 +37,9 @@ function lotIcon(code, selected) {
 
 function renderLots(lots) {
     markerLayer.clearLayers();
+    zoneLayer.clearLayers();
     appState.markers = {};
+    appState.zones = {};
     appState.selected = null;
     const list = document.getElementById('lot-list');
     list.innerHTML = '';
@@ -50,6 +57,12 @@ function renderLots(lots) {
         marker.addTo(markerLayer);
         appState.markers[lot.code] = marker;
 
+        if (lot.zone) {
+            const zone = L.polygon(JSON.parse(lot.zone), ZONE_STYLE).addTo(zoneLayer);
+            zone.on('click', () => focusLot(lot.code));
+            appState.zones[lot.code] = zone;
+        }
+
         const item = document.createElement('li');
         item.className = 'lot';
         item.innerHTML = `
@@ -66,9 +79,11 @@ function renderLots(lots) {
 function selectLot(code) {
     const previous = appState.markers[appState.selected];
     if (previous) previous.setIcon(lotIcon(appState.selected, false));
+    appState.zones[appState.selected]?.setStyle(ZONE_STYLE);
     const marker = appState.markers[code];
     if (!marker) return;
     marker.setIcon(lotIcon(code, true));
+    appState.zones[code]?.setStyle(ZONE_SELECTED);
     appState.selected = code;
 }
 

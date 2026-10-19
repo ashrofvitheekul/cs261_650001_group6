@@ -12,5 +12,6 @@ entity parking_lot {
   * total_spots : INT  -- > 0
   * available_spots : INT  -- 0..total_spots
   * updated_at : DATETIME2
+  zone : NVARCHAR(MAX)  -- lot outline JSON [[lat,lng],...]
 }
 @enduml

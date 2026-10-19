@@ -16,8 +16,14 @@ BEGIN
         total_spots     INT            NOT NULL CHECK (total_spots > 0),
         available_spots INT            NOT NULL,
         updated_at      DATETIME2      NOT NULL DEFAULT SYSDATETIME(),
+        zone            NVARCHAR(MAX)  NULL,              -- lot outline as JSON [[lat,lng],...] (map highlight)
         CONSTRAINT ck_parking_lot_available CHECK (available_spots BETWEEN 0 AND total_spots),
         CONSTRAINT ck_parking_lot_vehicle_type CHECK (vehicle_type IN (N'CAR', N'MOTORCYCLE'))
     );
 END
+GO
+
+-- Databases created before the zone column existed
+IF COL_LENGTH(N'dbo.parking_lot', N'zone') IS NULL
+    ALTER TABLE dbo.parking_lot ADD zone NVARCHAR(MAX) NULL;
 GO

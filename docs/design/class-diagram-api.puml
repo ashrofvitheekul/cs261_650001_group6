@@ -19,7 +19,7 @@ package service {
 package dto {
 class ParkingLotResponse <<record>> {
     id, code, nameTh, building, vehicleType
-    latitude, longitude, totalSpots, availableSpots
+    latitude, longitude, zone
   }
   class NearestLotResponse <<record>> {
     lot : ParkingLotResponse
