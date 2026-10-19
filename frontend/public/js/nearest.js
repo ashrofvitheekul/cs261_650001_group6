@@ -1,5 +1,6 @@
 // US05: find the closest lot of the chosen vehicle type and open directions to it
 
+
 const nearestBox = document.getElementById('nearest-result');
 const routeLayer = L.layerGroup().addTo(map);
 
