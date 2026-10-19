@@ -6,11 +6,12 @@ async function requestJson(path) {
         error.status = res.status;
         throw error;
     }
-return body;
+    return body;
 }
 
 function fetchLots(keyword) {
-    return Promise.resolve(SAMPLE_LOTS);
+    const query = keyword ? `?q=${encodeURIComponent(keyword)}` : '';
+    return requestJson(`/api/parking-lots${query}`);
 }
 
 function fetchNearest(lat, lng, type) {
