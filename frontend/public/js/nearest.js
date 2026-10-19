@@ -55,6 +55,11 @@ document.getElementById('nearest-btn').addEventListener('click', () => {
                 .addTo(routeLayer);
             L.polyline([[latitude, longitude], [lot.latitude, lot.longitude]], { color: '#7b1113', weight: 3, dashArray: '8 8' })
                 .addTo(routeLayer);
+            if (appState.keyword) {
+                searchInput.value = '';
+                appState.keyword = '';
+                await loadLots();
+            }
             focusLot(lot.code);
         } catch (err) {
             // 404 = no lot of this vehicle type; the API sends the Thai message
