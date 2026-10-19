@@ -1,5 +1,6 @@
 // US04: search by building, lot name or lot code (map.js does the drawing)
 
+
 const searchInput = document.getElementById('search-input');
 let searchTimer = null;
 
