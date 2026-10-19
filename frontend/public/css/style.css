@@ -85,3 +85,4 @@ input, button { font: inherit; }
     .map { order: 2; height: 55vh; }
     .panel { order: 1; overflow: visible; }
 }
+

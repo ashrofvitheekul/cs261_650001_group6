@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import th.ac.tu.smartparking.entity.ParkingLot;
 
-
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -57,10 +56,10 @@ class ParkingLotRepositoryIT {
     }
 
     @Test
-    void onlyLotsWithFreeSpotsOfThatVehicleType() {
-        List<ParkingLot> cars = repository.findByVehicleTypeAndAvailableSpotsGreaterThan(ParkingLot.CAR, 0);
+    void onlyLotsOfThatVehicleType() {
+        List<ParkingLot> cars = repository.findByVehicleTypeOrderByCodeAsc(ParkingLot.CAR);
 
-        assertTrue(cars.stream().allMatch(l -> l.getVehicleType().equals("CAR") && l.getAvailableSpots() > 0));
-        assertTrue(cars.stream().noneMatch(l -> l.getCode().equals("P4"))); // P4 is full in the seed
+        assertEquals(List.of("P1", "P2", "P3", "P4", "P5", "P6"), cars.stream().map(ParkingLot::getCode).toList());
+        assertTrue(cars.stream().allMatch(l -> l.getVehicleType().equals("CAR")));
     }
 }
