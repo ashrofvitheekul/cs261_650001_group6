@@ -9,3 +9,6 @@ target/
 
 # Logs
 *.log
+# macOS / PlantUML export
+.DS_Store
+out/
