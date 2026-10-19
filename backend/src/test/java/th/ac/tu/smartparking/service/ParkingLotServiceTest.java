@@ -64,7 +64,7 @@ class ParkingLotServiceTest {
  @Test
  void nearestPicksClosestLotWithFreeSpots() {
  // user stands at P4 (full, so the repository does not return it)
- when(repository.findByVehicleTypeAndAvailableSpotsGreaterThan("CAR", 0)).thenReturn(List.of(
+ when(repository.findByVehicleTypeOrderByCodeAsc("CAR")).thenReturn(List.of(
  lot("P3", "CAR", 14.068700, 100.602900, 320, 118),
  lot("P2", "CAR", 14.070200, 100.606550, 240, 15)));
 
@@ -76,7 +76,7 @@ class ParkingLotServiceTest {
 
  @Test
  void nearestUsesOnlyLotsOfTheChosenVehicleType() {
- when(repository.findByVehicleTypeAndAvailableSpotsGreaterThan("MOTORCYCLE", 0)).thenReturn(List.of(
+ when(repository.findByVehicleTypeOrderByCodeAsc("MOTORCYCLE")).thenReturn(List.of(
  lot("M2", "MOTORCYCLE", 14.065400, 100.610100, 300, 25)));
 
  NearestLotResponse result = service.findNearest(14.066600, 100.607600, "MOTORCYCLE");
@@ -87,12 +87,12 @@ class ParkingLotServiceTest {
 
  @Test
  void nearestThrowsWhenEveryLotIsFull() {
- when(repository.findByVehicleTypeAndAvailableSpotsGreaterThan("CAR", 0)).thenReturn(List.of());
+ when(repository.findByVehicleTypeOrderByCodeAsc("CAR")).thenReturn(List.of());
 
  NotFoundException e = assertThrows(NotFoundException.class,
  () -> service.findNearest(14.0666, 100.6076, "CAR"));
 
- assertEquals("ขณะนี้ลานจอดรถยนต์เต็มทุกลาน", e.getMessage());
+ assertEquals("ยังไม่มีข้อมูลลานจอด", e.getMessage());
  }
 
  @Test

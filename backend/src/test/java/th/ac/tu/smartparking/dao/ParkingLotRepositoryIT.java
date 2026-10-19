@@ -56,8 +56,8 @@ class ParkingLotRepositoryIT {
     }
 
     @Test
-    void onlyAvailableLotsOfThatVehicleType() {
-        List<ParkingLot> cars = repository.findByVehicleTypeAndAvailableSpotsGreaterThan(ParkingLot.CAR, 0);
+    void onlyLotsOfThatVehicleType() {
+        List<ParkingLot> cars = repository.findByVehicleTypeOrderByCodeAsc(ParkingLot.CAR);
 
         assertEquals(List.of("P1", "P2", "P3", "P4", "P5", "P6"), cars.stream().map(ParkingLot::getCode).toList());
         assertTrue(cars.stream().allMatch(l -> l.getVehicleType().equals("CAR")));

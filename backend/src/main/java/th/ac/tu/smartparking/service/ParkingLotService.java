@@ -38,11 +38,11 @@ public class ParkingLotService {
 /** US05: the closest lot of this vehicle type (Sprint 1 does not look at free spots). */
     public NearestLotResponse findNearest(double latitude, double longitude, String vehicleType) {
         String type = normalizeVehicleType(vehicleType);
-        return repository.findByVehicleTypeAndAvailableSpotsGreaterThan(type, 0).stream()
+        return repository.findByVehicleTypeOrderByCodeAsc(type).stream()
         .map(lot -> new NearestLotResponse(toResponse(lot), Math.round(distanceMeters(
         latitude, longitude, lot.getLatitude().doubleValue(), lot.getLongitude().doubleValue()))))
         .min(Comparator.comparingLong(NearestLotResponse::distanceMeters))
-        .orElseThrow(() -> new NotFoundException("ขณะนี้ลานจอดรถยนต์เต็มทุกลาน"));
+        .orElseThrow(() -> new NotFoundException("ยังไม่มีข้อมูลลานจอด"));
     }
 
 /** Straight-line distance between two GPS points (haversine formula). */
