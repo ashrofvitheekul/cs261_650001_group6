@@ -10,7 +10,7 @@ import java.util.List;
 /** DAO for dbo.parking_lot. */
 public interface ParkingLotRepository extends JpaRepository<ParkingLot, Long> {
 
-    /** US02: every lot, sorted by signage code (P1, P2, ... M1, M2). */
+    /** US02: every lot, sorted by signage code (M1, M2, P1, ... P6). */
     List<ParkingLot> findAllByOrderByCodeAsc();
 
     /** US04: lots whose code, name or building contains the keyword (ignores upper/lower case). */
@@ -23,6 +23,6 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLot, Long> {
             """)
     List<ParkingLot> search(@Param("keyword") String keyword);
 
-    /** US05: lots for one vehicle type that still have free spots. */
-    List<ParkingLot> findByVehicleTypeAndAvailableSpotsGreaterThan(String vehicleType, int availableSpots);
+    /** US05: every lot for one vehicle type; the service picks the closest. */
+    List<ParkingLot> findByVehicleTypeOrderByCodeAsc(String vehicleType);
 }

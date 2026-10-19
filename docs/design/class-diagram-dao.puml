@@ -4,7 +4,7 @@ interface "JpaRepository<ParkingLot, Long>" as JPA
 interface ParkingLotRepository {
   +findAllByOrderByCodeAsc() : List<ParkingLot>
   +search(keyword : String) : List<ParkingLot>
-  +findByVehicleTypeAndAvailableSpotsGreaterThan(type : String, n : int) : List<ParkingLot>
+  +findByVehicleTypeOrderByCodeAsc(type : String) : List<ParkingLot>
 }
 
 class ParkingLot <<Entity>> {
