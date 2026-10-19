@@ -5,7 +5,7 @@ let searchTimer = null;
 
 searchInput.addEventListener('input', () => {
     clearTimeout(searchTimer);
-  
+    // wait until the user stops typing for 300 ms, then ask the API once
     searchTimer = setTimeout(() => {
         appState.keyword = searchInput.value.trim();
         loadLots();

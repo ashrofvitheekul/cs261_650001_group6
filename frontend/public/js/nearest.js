@@ -1,49 +1,37 @@
-// US05: find the closest lot with free spots and open directions to it
+// US05: find the closest lot of the chosen vehicle type and open directions to it
 
 const nearestBox = document.getElementById('nearest-result');
-
-let userMarker = null;
-let routeLine = null;
+const routeLayer = L.layerGroup().addTo(map);
 
 function selectedVehicleType() {
     return document.querySelector('input[name="vehicle"]:checked').value;
+}
+
+// isAlert = red box (no location / error)
+function showNearest(html, isAlert = false) {
+    nearestBox.innerHTML = html;
+    nearestBox.classList.toggle('alert', isAlert);
+    nearestBox.hidden = false;
 }
 
 function roundedMeters(meters) {
     return Math.round(meters / 10) * 10;
 }
 
-function showNearest(html, isError = false) {
-    nearestBox.innerHTML = html;
-    nearestBox.classList.toggle('nearest-error', isError); 
-    nearestBox.hidden = false;
+// Location blocked: every lot in the list shows its own "นำทาง" button (Figma screen 11)
+function showNavInList(show) {
+    document.body.classList.toggle('show-nav', show);
 }
 
-function clearRoute() {
-    if (routeLine) { map.removeLayer(routeLine); routeLine = null; }
-    if (userMarker) { map.removeLayer(userMarker); userMarker = null; }
-}
-
-function navigateButton(lat, lng, origin) {
-    let url = directionsUrl(lat, lng);
-    return `<a class="btn-navigate" href="${url}" target="_blank" rel="noopener">นำทาง (เปิด Google Maps)</a>`;
-}
-
-// ใช้ตำแหน่งไม่ได้ / ผิดพลาด: กล่องแดง + ทุกลานมีปุ่มนำทาง
-function showAllLotsFallback(message) {
-    const items = appState.lots.map((lot) => `
-        <div class="nearest-card">
-            <strong>${escapeHtml(lot.code)} · ${escapeHtml(lot.nameTh)}</strong><br>
-            ${navigateButton(lot.latitude, lot.longitude)}
-        </div>`).join('');
-    showNearest(`<div class="nearest-msg">${escapeHtml(message)}</div>${items}`, true);
+function locationBlocked() {
+    showNearest('ไม่สามารถใช้ตำแหน่งของคุณได้ เลือกลานจากรายการเพื่อนำทาง', true);
+    showNavInList(true);
 }
 
 document.getElementById('nearest-btn').addEventListener('click', () => {
-    clearRoute();
-
+    routeLayer.clearLayers();
     if (!navigator.geolocation) {
-        showAllLotsFallback('เบราว์เซอร์นี้ใช้ตำแหน่งไม่ได้ เลือกลานด้านล่างเพื่อนำทาง');
+        locationBlocked();
         return;
     }
     showNearest('กำลังหาตำแหน่งของคุณ...');
@@ -53,32 +41,23 @@ document.getElementById('nearest-btn').addEventListener('click', () => {
         try {
             const result = await fetchNearest(latitude, longitude, selectedVehicleType());
             const lot = result.lot;
-
+            showNavInList(false);
             showNearest(`
-                <div class="nearest-card">
-                    <strong>${escapeHtml(lot.code)} · ${escapeHtml(lot.nameTh)}</strong><br>
-                    ห่างประมาณ ${roundedMeters(result.distanceMeters)} เมตร<br>
-                    ${navigateButton(lot.latitude, lot.longitude)}
-                </div>`);
-
-            userMarker = L.circleMarker([latitude, longitude], {
-                radius: 8, color: '#fff', weight: 2, fillColor: '#2563eb', fillOpacity: 1
-            }).addTo(map);
-            routeLine = L.polyline([[latitude, longitude], [lot.latitude, lot.longitude]], {
-                color: '#d32f2f', weight: 4, dashArray: '8 8'
-            }).addTo(map);
-            map.fitBounds(routeLine.getBounds(), { padding: [60, 60] });
-
+                <div class="result-card">
+                    <strong>${escapeHtml(lot.code)}</strong>
+                    <div>${escapeHtml(lot.nameTh)}</div>
+                    <div class="distance">ห่างประมาณ ${roundedMeters(result.distanceMeters)} เมตร</div>
+                </div>
+                <a class="btn-primary" href="${directionsUrl(lot.latitude, lot.longitude)}" target="_blank" rel="noopener">นำทาง (เปิด Google Maps)</a>`);
+            // Figma: black dot = you, dashed line = straight way to the lot
+            L.circleMarker([latitude, longitude], { radius: 6, color: '#fff', weight: 2, fillColor: '#111', fillOpacity: 1 })
+                .addTo(routeLayer);
+            L.polyline([[latitude, longitude], [lot.latitude, lot.longitude]], { color: '#7b1113', weight: 3, dashArray: '8 8' })
+                .addTo(routeLayer);
             focusLot(lot.code);
         } catch (err) {
-            if (err.status === 404) {
-               
-                showAllLotsFallback(err.message);
-            } else {
-                showAllLotsFallback('หาลานใกล้ที่สุดไม่สำเร็จ กรุณาลองใหม่');
-            }
+            // 404 = no lot of this vehicle type; the API sends the Thai message
+            showNearest(escapeHtml(err.status === 404 ? err.message : 'หาลานใกล้ที่สุดไม่สำเร็จ กรุณาลองใหม่'), true);
         }
-    }, () => {
-        showAllLotsFallback('ไม่สามารถใช้ตำแหน่งของคุณได้ กรุณาอนุญาตการเข้าถึงตำแหน่ง หรือเลือกลานด้านล่าง');
-    }, { timeout: 10000 });
+    }, locationBlocked, { timeout: 10000 });
 });
