@@ -1,5 +1,4 @@
-// US05: find the closest lot of the chosen vehicle type and open directions to it
-
+// US05 หาลานใกล้สุด + นำทาง
 
 const nearestBox = document.getElementById('nearest-result');
 const routeLayer = L.layerGroup().addTo(map);
@@ -8,7 +7,7 @@ function selectedVehicleType() {
     return document.querySelector('input[name="vehicle"]:checked').value;
 }
 
-// isAlert = red box (no location / error)
+// isAlert = กล่องแดง
 function showNearest(html, isAlert = false) {
     nearestBox.innerHTML = html;
     nearestBox.classList.toggle('alert', isAlert);
@@ -19,7 +18,7 @@ function roundedMeters(meters) {
     return Math.round(meters / 10) * 10;
 }
 
-// Location blocked: every lot in the list shows its own "นำทาง" button (Figma screen 11)
+// ไม่ได้ตำแหน่ง: ให้ทุกลานในรายการมีปุ่มนำทาง
 function showNavInList(show) {
     document.body.classList.toggle('show-nav', show);
 }
@@ -50,7 +49,7 @@ document.getElementById('nearest-btn').addEventListener('click', () => {
                     <div class="distance">ห่างประมาณ ${roundedMeters(result.distanceMeters)} เมตร</div>
                 </div>
                 <a class="btn-primary" href="${directionsUrl(lot.latitude, lot.longitude)}" target="_blank" rel="noopener">นำทาง (เปิด Google Maps)</a>`);
-            // Figma: black dot = you, dashed line = straight way to the lot
+            // จุดดำ = เรา เส้นประไปที่ลาน
             L.circleMarker([latitude, longitude], { radius: 6, color: '#fff', weight: 2, fillColor: '#111', fillOpacity: 1 })
                 .addTo(routeLayer);
             L.polyline([[latitude, longitude], [lot.latitude, lot.longitude]], { color: '#7b1113', weight: 3, dashArray: '8 8' })
@@ -62,7 +61,7 @@ document.getElementById('nearest-btn').addEventListener('click', () => {
             }
             focusLot(lot.code);
         } catch (err) {
-            // 404 = no lot of this vehicle type; the API sends the Thai message
+            // 404 ใช้ข้อความจาก API
             showNearest(escapeHtml(err.status === 404 ? err.message : 'หาลานใกล้ที่สุดไม่สำเร็จ กรุณาลองใหม่'), true);
         }
     }, locationBlocked, { timeout: 10000 });
