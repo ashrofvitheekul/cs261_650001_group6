@@ -1,33 +1,35 @@
 @startuml
-actor User as U
-participant "Web Page\n(nearest.js)" as UI
-participant "Browser\n(Geolocation)" as GPS
+skinparam defaultFontName Tahoma
+title US05 หาลานจอดที่ใกล้ที่สุดและนำทาง
+actor "ผู้ใช้" as U
+participant "หน้าเว็บ\n(nearest.js)" as UI
+participant "เบราว์เซอร์\n(Geolocation)" as GPS
 participant ParkingLotController as C
 participant ParkingLotService as S
 participant ParkingLotRepository as R
 database "MS SQL" as DB
 
-U -> UI : Select car and click "Find Nearest Parking Lot"
+U -> UI : เลือกรถยนต์ แล้วกด "หาลานใกล้ที่สุด"
 UI -> GPS : getCurrentPosition()
 
-alt User denies permission
+alt ไม่อนุญาตตำแหน่ง
   GPS --> UI : error
-  UI --> U : "Unable to access your location ..." (every lot keeps its "Navigate" link)
-else Permission granted
+  UI --> U : "ไม่สามารถใช้ตำแหน่งของคุณได้ ..." (ทุกลานในรายการมีปุ่ม "นำทาง")
+else อนุญาต
   GPS --> UI : lat, lng
   UI -> C : GET /api/parking-lots/nearest?lat&lng&type=CAR
   C -> S : findNearest(lat, lng, "CAR")
   S -> R : findByVehicleTypeOrderByCodeAsc("CAR")
   R -> DB : SELECT ... WHERE vehicle_type='CAR' ORDER BY code
-  DB --> R : car parking lots
-  S -> S : distanceMeters() for each lot and pick the smallest
+  DB --> R : ลานรถยนต์
+  S -> S : distanceMeters() ทุกลาน เลือกลานที่ใกล้สุด
 
-  alt No lot of this vehicle type
+  alt ไม่มีลานของรถประเภทนี้
     S --> C : NotFoundException
     C --> UI : 404 {"message":"ยังไม่มีข้อมูลลานจอด"}
-  else Lot found
+  else เจอลาน
     C --> UI : 200 {lot, distanceMeters}
-    UI --> U : Lot name + distance + "Navigate" button (opens Google Maps)
+    UI --> U : ชื่อลาน + ระยะทาง + ปุ่ม "นำทาง" (เปิด Google Maps)
   end
 end
 @enduml
