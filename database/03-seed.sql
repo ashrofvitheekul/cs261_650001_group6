@@ -1,5 +1,5 @@
--- Demo data. Coordinates = centre of each lot's outline in OpenStreetMap (same outlines as the Figma prototype).
--- zone = lot outline as JSON [[lat,lng],...] for the map highlight.
+-- ข้อมูล 8 ลาน พิกัด = กลางเขตลานใน OpenStreetMap
+-- zone = เขตลาน [[lat,lng],...]
 USE SmartParking;
 GO
 
