@@ -4,7 +4,7 @@
 
 | รหัส | ทดสอบ | ขั้นตอน | ต้องได้ |
 |---|---|---|---|
-| SYS-1 | ติดตั้งจากศูนย์ | clone ใหม่ → `docker compose up -d --build` | 3 container running ภายใน 10 นาที · `/api/health` = UP |
+| SYS-1 | ติดตั้งจากศูนย์ | clone ใหม่ → `docker compose up -d --build` | 3 container running ภายใน 10 นาที, `/api/health` = UP |
 | SYS-2 | Sequence US02 | เปิดหน้าแรก | หมุด 8 จุด ข้อมูลตรงกับตาราง `parking_lot` |
 | SYS-3 | Sequence US04 | ค้นหา "หอสมุด" → ล้างคำค้น | ค้นหาได้ P3 → ล้างแล้วกลับเป็น 8 ลาน |
 | SYS-4 | Sequence US05 | Sensors `14.0687, 100.6056`  → เลือกรถยนต์ → หาลาน → นำทาง | P2 ห่างประมาณ 150 ม. → เปิด Google Maps |

@@ -1,11 +1,18 @@
 @startuml
+skinparam defaultFontName Tahoma
+title Class Diagram - DAO
 interface "JpaRepository<ParkingLot, Long>" as JPA
 
 interface ParkingLotRepository {
   +findAllByOrderByCodeAsc() : List<ParkingLot>
   +search(keyword : String) : List<ParkingLot>
+  +searchLike(keyword : String) : List<ParkingLot>
   +findByVehicleTypeOrderByCodeAsc(type : String) : List<ParkingLot>
 }
+note right of ParkingLotRepository
+  search() กัน % _ [ ที่ผู้ใช้พิมพ์
+  แล้วส่งต่อให้ searchLike() (@Query LIKE)
+end note
 
 class ParkingLot <<Entity>> {
   -id : Long
@@ -22,5 +29,5 @@ class ParkingLot <<Entity>> {
 }
 
 JPA <|-- ParkingLotRepository
-ParkingLotRepository ..> ParkingLot
+ParkingLotRepository ..> ParkingLot : อ่านจากตาราง parking_lot
 @enduml

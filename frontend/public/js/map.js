@@ -8,7 +8,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 const zoneLayer = L.layerGroup().addTo(map);
 const markerLayer = L.layerGroup().addTo(map);
 
-// Lot outline from the database (same outlines as the Figma prototype)
+// เขตลาน
 const ZONE_STYLE = { color: '#7b1113', weight: 2, fillColor: '#7b1113', fillOpacity: 0.25 };
 const ZONE_SELECTED = { weight: 3, fillOpacity: 0.55 };
 

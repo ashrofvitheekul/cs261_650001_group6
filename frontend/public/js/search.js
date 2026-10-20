@@ -1,12 +1,11 @@
-// US04: search by building, lot name or lot code (map.js does the drawing)
-
+// US04 ค้นหาลาน
 
 const searchInput = document.getElementById('search-input');
 let searchTimer = null;
 
 searchInput.addEventListener('input', () => {
     clearTimeout(searchTimer);
-    // wait until the user stops typing for 300 ms, then ask the API once
+    // รอหยุดพิมพ์ 300 ms ค่อยเรียก API
     searchTimer = setTimeout(() => {
         appState.keyword = searchInput.value.trim();
         loadLots();

@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TU Smart Parking</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%237b1113' d='M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7z'/%3E%3Crect x='8.5' y='7' width='7' height='4.5' rx='1.2' fill='%23fff'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;700&display=swap">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Left menu (Figma: hifi-ptototype). Sprint 1 has 3 pages; the rest come in Sprint 2 -->
+    <!-- เมนูซ้าย -->
     <aside class="sidebar">
         <div class="brand">
             <svg class="logo" viewBox="0 0 24 24" aria-hidden="true">
@@ -39,7 +40,7 @@
             <section class="panel">
                 <!-- US04 ค้นหา (ณัฏฐนิชา) -->
                 <div class="search">
-                    <input id="search-input" type="search" placeholder="ค้นหาชื่อลาน / ชื่ออาคาร" autocomplete="off">
+                    <input id="search-input" type="search" aria-label="ค้นหาลานจอด" placeholder="ค้นหาชื่อลาน / ชื่ออาคาร" autocomplete="off">
                     <button id="search-clear" type="button" class="link-btn">✕ ล้าง</button>
                 </div>
 

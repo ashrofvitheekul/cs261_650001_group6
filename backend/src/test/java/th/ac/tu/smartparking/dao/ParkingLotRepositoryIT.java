@@ -12,8 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * DAO tests against the real MS SQL in Docker (seed data from database/03-seed.sql).
- * Name ends with "IT" so `mvnw package` skips it. Run it on purpose:
+ * test DAO กับ MS SQL จริง (ข้อมูล seed 8 ลาน)
+ * ชื่อลงท้าย IT ตอน build จะไม่รัน ต้องสั่งเอง:
  *   docker compose up -d db db-init
  *   cd backend && ./mvnw test -Dtest=ParkingLotRepositoryIT
  */
@@ -53,6 +53,13 @@ class ParkingLotRepositoryIT {
     @Test
     void searchReturnsNothingForUnknownPlace() {
         assertTrue(repository.search("ตึกโดม").isEmpty());
+    }
+
+    @Test
+    void percentAndUnderscoreAreNotWildcards() {
+        assertTrue(repository.search("%").isEmpty());
+        assertTrue(repository.search("_").isEmpty());
+        assertTrue(repository.search("[").isEmpty());
     }
 
     @Test
