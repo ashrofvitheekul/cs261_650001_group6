@@ -69,7 +69,7 @@ input, button { font: inherit; }
 .lot { margin-bottom: 10px; padding: 12px; border: 1px solid var(--line); }
 .lot-name { display: flex; flex-direction: column; gap: 4px; width: 100%; padding: 0; border: 0; background: none; text-align: left; cursor: pointer; }
 .nav-link { display: none; margin-top: 8px; padding: 5px 12px; border: 1px solid var(--tu-red); color: var(--tu-red); font-size: 14px; font-weight: 700; text-decoration: none; }
-.show-nav .nav-link { display: inline-block; }   /* location blocked: every lot gets "นำทาง" */
+.show-nav .nav-link { display: inline-block; }   /* ไม่ได้ตำแหน่ง ให้ทุกลานมีปุ่มนำทาง */
 .hint { padding: 8px 10px; border: 1px dashed var(--line); font-size: 13px; color: var(--muted); }
 
 .lot-pin { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border: 2px solid #fff; border-radius: 50%; background: var(--pin); color: #fff; font-size: 13px; font-weight: 700; box-shadow: 0 1px 4px rgba(0, 0, 0, .4); }
