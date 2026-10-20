@@ -1,0 +1,37 @@
+@startuml deployment
+skinparam defaultFontName Tahoma
+title TU Smart Parking - Deployment (docker compose)
+
+node "เครื่องผู้ใช้" as pc {
+  artifact "เว็บเบราว์เซอร์" as browser
+}
+
+node "Docker Desktop" as docker {
+  node "sp-frontend\n(node:20-alpine, Express)" as fe {
+    artifact "public/ (HTML, CSS, JS, Leaflet)" as static
+  }
+  node "sp-backend\n(Tomcat 11, Java 21)" as be {
+    artifact "ROOT.war (Spring Boot)" as war
+  }
+  node "sp-db\n(MS SQL Server 2019)" as db {
+    database "SmartParking\n(parking_lot)" as sp
+  }
+  node "sp-db-init\n(รันครั้งเดียวตอนเริ่ม)" as init {
+    artifact "database/*.sql" as sql
+  }
+  storage "volume mssql-data\n(เก็บข้อมูลถาวร)" as vol
+}
+
+cloud "อินเทอร์เน็ต" as net {
+  node "OpenStreetMap tiles" as osm
+  node "Google Maps" as gmaps
+}
+
+browser --> static : HTTP :3000
+browser --> war : REST JSON :8081 → 8080
+war --> sp : JDBC :1433
+sql --> sp : sqlcmd
+sp -- vol
+browser --> osm : ภาพแผนที่
+browser --> gmaps : นำทาง
+@enduml
