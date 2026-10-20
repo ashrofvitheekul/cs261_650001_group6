@@ -1,5 +1,5 @@
--- Schema for Sprint 1 (ER diagram: docs/design/er-diagram).
--- Runs on every `docker compose up`, so every change must be safe to run twice.
+-- ตารางของ Sprint 1 (ดู docs/design/er-diagram)
+-- รันทุกครั้งที่ docker compose up ต้องรันซ้ำได้
 USE SmartParking;
 GO
 
@@ -23,7 +23,7 @@ BEGIN
 END
 GO
 
--- Databases created before the zone column existed
+-- DB เก่าที่ยังไม่มีคอลัมน์ zone
 IF COL_LENGTH(N'dbo.parking_lot', N'zone') IS NULL
     ALTER TABLE dbo.parking_lot ADD zone NVARCHAR(MAX) NULL;
 GO
