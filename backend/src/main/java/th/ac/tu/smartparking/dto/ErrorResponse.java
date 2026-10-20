@@ -1,5 +1,5 @@
 package th.ac.tu.smartparking.dto;
 
-/** Body for 4xx answers, e.g. {"message":"ไม่พบลานจอด"}. The frontend shows the message as is. */
+/** body ตอน error เช่น {"message":"ไม่พบลานจอด"} */
 public record ErrorResponse(String message) {
 }

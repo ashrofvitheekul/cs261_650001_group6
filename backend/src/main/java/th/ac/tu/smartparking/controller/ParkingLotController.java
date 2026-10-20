@@ -1,6 +1,7 @@
 package th.ac.tu.smartparking.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import th.ac.tu.smartparking.dto.ErrorResponse;
 import th.ac.tu.smartparking.dto.NearestLotResponse;
 import th.ac.tu.smartparking.dto.ParkingLotResponse;
@@ -18,12 +20,12 @@ import th.ac.tu.smartparking.service.ParkingLotService;
 import java.util.List;
 
 /**
- * GET /api/parking-lots every lot (US02), ?q=keyword to search (US04)
- * GET /api/parking-lots/{id} one lot
- * GET /api/parking-lots/nearest closest lot of one vehicle type (US05)
+ * GET /api/parking-lots ลานทั้งหมด (US02), ?q= ค้นหา (US04)
+ * GET /api/parking-lots/{id} ลานเดียว
+ * GET /api/parking-lots/nearest ลานใกล้สุดตามประเภทรถ (US05)
  */
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://127.0.0.1:3000"})
 @RequestMapping("/api/parking-lots")
 public class ParkingLotController {
 
@@ -61,5 +63,17 @@ public class ParkingLotController {
  @ResponseStatus(HttpStatus.BAD_REQUEST)
  public ErrorResponse badRequest(IllegalArgumentException e) {
  return new ErrorResponse(e.getMessage());
+ }
+
+ @ExceptionHandler(MissingServletRequestParameterException.class)
+ @ResponseStatus(HttpStatus.BAD_REQUEST)
+ public ErrorResponse missingParameter(MissingServletRequestParameterException e) {
+ return new ErrorResponse("ต้องระบุ " + e.getParameterName());
+ }
+
+ @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+ @ResponseStatus(HttpStatus.BAD_REQUEST)
+ public ErrorResponse wrongParameter(MethodArgumentTypeMismatchException e) {
+ return new ErrorResponse("ค่า " + e.getName() + " ไม่ถูกต้อง");
  }
 }

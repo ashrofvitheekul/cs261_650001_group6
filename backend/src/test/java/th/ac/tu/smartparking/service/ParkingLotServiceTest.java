@@ -16,7 +16,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/** Unit tests for the rules in ParkingLotService. Test data matches User Story Detail US02 / US04 / US05. */
+/** test ParkingLotService ข้อมูลตาม User Story Detail */
 class ParkingLotServiceTest {
 
  private final ParkingLotRepository repository = mock(ParkingLotRepository.class);
@@ -26,7 +26,7 @@ class ParkingLotServiceTest {
  return new ParkingLot(code, "ลาน " + code, "อาคาร " + code, type, lat, lng, total, free, LocalDateTime.now());
  }
 
- // ---- US02: every lot ----
+ // US02
 
  @Test
  void noKeywordReturnsEveryLot() {
@@ -47,7 +47,7 @@ class ParkingLotServiceTest {
  verify(repository).findAllByOrderByCodeAsc();
  }
 
- // ---- US04: search ----
+ // US04
 
  @Test
  void searchUsesKeywordWithoutSpaces() {
@@ -59,11 +59,10 @@ class ParkingLotServiceTest {
  assertEquals("P3", result.get(0).code());
  }
 
- // ---- US05: nearest lot ----
+ // US05
 
  @Test
- void nearestPicksClosestLotWithFreeSpots() {
- // user stands at P4 (full, so the repository does not return it)
+ void nearestPicksClosestLot() {
  when(repository.findByVehicleTypeOrderByCodeAsc("CAR")).thenReturn(List.of(
  lot("P3", "CAR", 14.068700, 100.602900, 320, 118),
  lot("P2", "CAR", 14.070200, 100.606550, 240, 15)));
@@ -86,7 +85,7 @@ class ParkingLotServiceTest {
  }
 
  @Test
- void nearestThrowsWhenEveryLotIsFull() {
+ void nearestThrowsWhenNoLotOfThatType() {
  when(repository.findByVehicleTypeOrderByCodeAsc("CAR")).thenReturn(List.of());
 
  NotFoundException e = assertThrows(NotFoundException.class,

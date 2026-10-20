@@ -1,4 +1,6 @@
 @startuml
+skinparam defaultFontName Tahoma
+title Class Diagram - API
 skinparam classAttributeIconSize 0
 package controller {
   class ParkingLotController {
@@ -17,7 +19,7 @@ package service {
   class NotFoundException
 }
 package dto {
-class ParkingLotResponse <<record>> {
+  class ParkingLotResponse <<record>> {
     id, code, nameTh, building, vehicleType
     latitude, longitude, zone
   }
@@ -32,10 +34,10 @@ class ParkingLotResponse <<record>> {
 package dao {
   interface ParkingLotRepository
 }
-ParkingLotController --> ParkingLotService
-ParkingLotService --> ParkingLotRepository
+ParkingLotController --> ParkingLotService : เรียกใช้
+ParkingLotService --> ParkingLotRepository : อ่านข้อมูลลาน
 ParkingLotService ..> ParkingLotResponse
 ParkingLotService ..> NearestLotResponse
-ParkingLotController ..> ErrorResponse
-ParkingLotService ..> NotFoundException
+ParkingLotController ..> ErrorResponse : ตอบ 400 / 404
+ParkingLotService ..> NotFoundException : ไม่พบลาน
 @enduml
