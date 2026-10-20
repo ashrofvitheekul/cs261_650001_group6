@@ -7,22 +7,33 @@ import th.ac.tu.smartparking.entity.ParkingLot;
 
 import java.util.List;
 
-/** DAO for dbo.parking_lot. */
+/** DAO ของตาราง dbo.parking_lot */
 public interface ParkingLotRepository extends JpaRepository<ParkingLot, Long> {
 
-    /** US02: every lot, sorted by signage code (M1, M2, P1, ... P6). */
+    /** US02 ลานทั้งหมด เรียงตามรหัส */
     List<ParkingLot> findAllByOrderByCodeAsc();
 
-    /** US04: lots whose code, name or building contains the keyword (ignores upper/lower case). */
+    /**
+     * US04 ค้นจากรหัส ชื่อลาน หรืออาคาร
+     * กัน % _ [ ไม่ให้เป็น wildcard ของ LIKE
+     */
+    default List<ParkingLot> search(String keyword) {
+        String plain = keyword.replace("\\", "\\\\")
+                .replace("%", "\\%")
+                .replace("_", "\\_")
+                .replace("[", "\\[");
+        return searchLike(plain);
+    }
+
     @Query("""
             SELECT p FROM ParkingLot p
-            WHERE LOWER(p.code) LIKE LOWER(CONCAT('%', :keyword, '%'))
-               OR LOWER(p.nameTh) LIKE LOWER(CONCAT('%', :keyword, '%'))
-               OR LOWER(p.building) LIKE LOWER(CONCAT('%', :keyword, '%'))
+            WHERE LOWER(p.code) LIKE LOWER(CONCAT('%', :keyword, '%')) ESCAPE '\\'
+               OR LOWER(p.nameTh) LIKE LOWER(CONCAT('%', :keyword, '%')) ESCAPE '\\'
+               OR LOWER(p.building) LIKE LOWER(CONCAT('%', :keyword, '%')) ESCAPE '\\'
             ORDER BY p.code
             """)
-    List<ParkingLot> search(@Param("keyword") String keyword);
+    List<ParkingLot> searchLike(@Param("keyword") String keyword);
 
-    /** US05: every lot for one vehicle type; the service picks the closest. */
+    /** US05 ลานของรถประเภทนั้น (service เป็นคนหาลานใกล้สุด) */
     List<ParkingLot> findByVehicleTypeOrderByCodeAsc(String vehicleType);
 }

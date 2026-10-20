@@ -10,9 +10,6 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * Maps to table dbo.parking_lot (database/02-schema.sql).
- */
 @Entity
 @Table(name = "parking_lot")
 public class ParkingLot {
@@ -51,15 +48,15 @@ public class ParkingLot {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    /** Lot outline as JSON [[lat,lng],...]; drawn as the lot zone on the map. */
+    // เขตลาน JSON [[lat,lng],...]
     @Column(name = "zone")
     private String zone;
 
     protected ParkingLot() {
-        // for JPA
+        // JPA ต้องใช้
     }
 
-    /** Used by unit tests to build lots without a database. */
+    // ใช้ใน unit test
     public ParkingLot(String code, String nameTh, String building, String vehicleType,
             double latitude, double longitude, int totalSpots, int availableSpots, LocalDateTime updatedAt) {
         this.code = code;

@@ -1,18 +1,24 @@
 @startuml
-actor USER as U
-participant "WebPage\n(map.js)" as UI
+skinparam defaultFontName Tahoma
+title US02 ดูลานจอดบนแผนที่
+actor "ผู้ใช้" as U
+participant "หน้าเว็บ\n(map.js)" as UI
 participant ParkingLotController as C
 participant ParkingLotService as S
 participant ParkingLotRepository as R
 database "MS SQL\nparking_lot" as DB
-U -> UI : Open http://localhost:3000
+U -> UI : เปิด http://localhost:3000
 UI -> C : GET /api/parking-lots
 C -> S : findAll(null)
 S -> R : findAllByOrderByCodeAsc()
 R -> DB : SELECT ... ORDER BY code
-DB --> R : 8 Rows
+DB --> R : 8 แถว
 R --> S : List<ParkingLot>
 S --> C : List<ParkingLotResponse>
 C --> UI : 200 JSON
-UI --> U : Map pins + Car parking (Password · Name · building · navigation)
+alt ไม่มีข้อมูล
+  UI --> U : "ยังไม่มีข้อมูลลานจอด"
+else มีข้อมูล
+  UI --> U : หมุด + เขตลานบนแผนที่ และการ์ดรายการ (รหัส, ชื่อลาน)
+end
 @enduml

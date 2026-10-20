@@ -1,23 +1,25 @@
 @startuml
-actor USER as U
-participant "WebPage\n(search.js)" as UI
+skinparam defaultFontName Tahoma
+title US04 ค้นหาลานจอดจากชื่ออาคาร
+actor "ผู้ใช้" as U
+participant "หน้าเว็บ\n(search.js)" as UI
 participant ParkingLotController as C
 participant ParkingLotService as S
 participant ParkingLotRepository as R
 database "MS SQL" as DB
-U -> UI : type "library"
-UI -> UI : wait 300 ms after stop type
-UI -> C : GET /api/parking-lots?q=library
-C -> S : findAll("library")
-S -> R : search("library")
-R -> DB : WHERE code / name_th / building LIKE '%library%'
+U -> UI : พิมพ์ "หอสมุด"
+UI -> UI : รอ 300 ms หลังหยุดพิมพ์
+UI -> C : GET /api/parking-lots?q=หอสมุด
+C -> S : findAll("หอสมุด")
+S -> R : search("หอสมุด")
+R -> DB : WHERE code / name_th / building LIKE '%หอสมุด%'
 DB --> R : P3
 R --> S : [P3]
 S --> C : [P3]
 C --> UI : 200 JSON
-alt not found
-  UI --> U : "No matching parking lot found ..."
-else found
-  UI --> U : Show only matching parking lot.
+alt ไม่พบ
+  UI --> U : "ไม่พบลานจอดที่ตรงกับ ..."
+else พบ
+  UI --> U : แสดงเฉพาะลานที่ตรง (หมุด + การ์ด)
 end
 @enduml
